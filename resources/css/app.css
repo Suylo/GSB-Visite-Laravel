@@ -1,0 +1,84 @@
+/*@import '~bulma/css/bulma.min.css';*/
+
+html, body{
+    background-color : whitesmoke;
+}
+
+small{
+    font-weight: 300 !important;
+}
+
+.profile-picture{
+    width: 256px !important;
+}
+.profile-picture img{
+    border-radius: 50% !important;
+}
+.navnotif .material-icons{
+    vertical-align: -6px;
+}
+.navnotif a{
+    text-decoration: none !important;
+    border-bottom: 1px solid white;
+}
+
+.notif{
+    position: fixed;
+    z-index: 10;
+    bottom: 15px;
+    left: 15px;
+}
+.notif-long{
+    position: absolute;
+    z-index: 15;
+    width: 500px;
+    bottom: 15px;
+    left: 15px;
+}
+
+.text-left-icon{
+    vertical-align: 5px;
+}
+
+.banner-wallpaper{
+    position: fixed;
+    z-index: 5;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: url('https://cdn.discordapp.com/attachments/805548861250207774/899343574175465502/wallpaperflare.com_wallpaper.jpg') center/cover no-repeat;
+}
+.banner-overlay{
+    position: fixed;
+    z-index: 7;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color : rgba(0,0,0,0.5);
+}
+.z-index{
+    z-index: 10;
+}
+
+.section-main .content{
+    text-align: center;
+}
+
+.button-center{
+    text-align: center !important;
+}
+
+table {
+    counter-reset: tableCount;
+}
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
+
+.errors-list .material-icons{
+    vertical-align: -6px;
+}
+

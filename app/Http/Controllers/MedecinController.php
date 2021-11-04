@@ -1,0 +1,175 @@
+<?php
+
+
+namespace App\Http\Controllers;
+
+use App\Models\Rapport;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Models\Medecin;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Validator;
+
+class MedecinController extends Controller
+{
+
+    /**
+     * Fonction permettant la recherche d'un médecin selon le début de son nom/prénom
+     *
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function search(Request $request){
+
+        $title = "Recherche d'un médecin";
+
+        // Recherche à travers la BDD et on met ces données à l'intérieur d'une variable
+        $q = $request->input( 'q' );
+        $medecins = Medecin::where('nom', 'LIKE', $q . '%')->orWhere('prenom', 'LIKE', $q . '%')->get();
+
+        return view('medecins.search', [
+            'medecins' => $medecins,
+            'title' => $title
+        ]);
+
+    }
+
+    /**
+     *
+     * Fonction qui retourne la vue d'un profil d'un médecin selon son ID
+     *
+     * @param Request $request
+     * @param $id
+     * @return Application|Factory|View|RedirectResponse|Redirector
+     */
+    public function viewProfile(Request $request, $id){
+
+        $title = "Profil du médecin #" . $id;
+        $leMedecin = Medecin::where('id', $id)->get();
+
+        /**
+         * On regarde si la requête renvoie quelque chose dans la variable
+         * Si cette dernière est vide/null, cela signifie qu'il n'y aucun médecin avec cet ID
+         * On redirige donc vers la page de recherche.
+        **/
+        if(sizeof($leMedecin)){
+            return view('medecins.profile', [
+                'medecin' => $leMedecin,
+                'title' => $title
+            ]);
+        } else {
+            return redirect('/search');
+        }
+    }
+
+
+    /**
+     *
+     * Fonction qui retourne les rapports d'un seul médecin (Selon l'id du médecin)
+     *
+     * @param Request $request
+     * @param $id
+     * @return Application|Factory|View
+     */
+    public function viewMedecinRapport(Request $request, $id){
+
+        $title = "Rapports du médecin #" . $id;
+        $rapports = Rapport::where('id_medecin', $id)
+            ->orderBy('date', 'DESC')
+            ->get();
+        $medecinID = $id;
+
+        return view('medecins.rapports', [
+            'rapports' => $rapports,
+            'medecinID' => $medecinID,
+            'title' => $title
+        ]);
+    }
+
+
+    /**
+     *
+     * Fonction retournant la vue de modification d'un médecin
+     * - Récupèration de toutes les informations du médecin avec son id
+     *
+     * @param Request $request
+     * @param $id
+     * @return Application|Factory|View|RedirectResponse|Redirector
+     */
+    public function viewUpdateProfile(Request $request, $id)
+    {
+        $title = "Modification du médecin #" . $id;
+        $leMedecin = Medecin::where('id', $id)->get();
+
+        /**
+         * On vérifie si le médecin existe avec cet ID
+         * @see MedecinController::viewProfile()
+         */
+        if(sizeof($leMedecin)){
+            return view('medecins.edit', [
+                'medecin' => $leMedecin,
+                'title' => $title
+            ]);
+        } else {
+            return redirect('/search');
+        }
+    }
+
+
+    /**
+     *
+     * Fonction permettant la mise à jour d'un médecin
+     *
+     * @param Request $request
+     * @param $id
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function updateProfile(Request $request, $id)
+    {
+        // Règles de validation
+        $rules = [
+            'nom' => 'required|string|max:25',
+            'prenom' => 'required|string|max:25',
+            'adresse' => 'required|string|max:255',
+            'tel' => 'required|string|max:20',
+        ];
+
+        // Messages
+        $rulesMsg = [
+            'max' => 'Le nombre de caractères ne peut pas excéder :max !',
+            'nom.required' => 'Le champ "Nom" ne peut pas être vide !',
+            'prenom.required' => 'Le champ "Prénom" ne peut pas être vide !',
+            'adresse.required' => 'L\'adresse ne peut pas être vide !',
+            'tel.required' => 'Le numéro de téléphone est obligatoire !'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $rulesMsg);
+        if ($validator->fails()) {
+            return redirect()->back()
+//                ->with('profileFailed', 'Tous les champs doivent obligatoirement être rempli (sauf spécialité) et ils ne doivent pas être vide !')
+                ->withErrors($validator);
+        } else {
+            $data = $request->input();
+            try {
+                // Mise à jour de l'objet
+                Medecin::where('id', $id)->update([
+                    'nom' => $data['nom'],
+                    'prenom' => $data['prenom'],
+                    'adresse' => $data['adresse'],
+                    'tel' => $data['tel'],
+                    'specialite_complementaire' => $data['speci'],
+                ]);
+
+                // L'objet a bien été modifié ! On redirige avec un message indiquant que le profil a bien été modifié !
+                return redirect('profile/' . $id)->with('profileEdited', "Le profil a bien été modifié.");
+            } catch (Exception $e) {
+
+                // Pour une quelconque raison l'objet n'a pas pu être modifié
+                return redirect('profile/' . $id)->with('failed', "Le profil n'a pas pu être enregistré suite à une erreur, veuillez recommencer !");
+            }
+        }
+    }
+}
