@@ -14,7 +14,7 @@
 Pour la réalisation de ce projet, il était possible de le faire dans différents langages.
 
 Pour ma part, j'ai utilisé [**PHP**](https://www.php.net/) avec le framework [**Laravel**](https://laravel.com/).
-
+Pour le design du site, j'ai utilisé le framework CSS [**Bulma.io**](https://bulma.io/).
 
 ## **Installation**
 *Quand le projet sera terminé !*
