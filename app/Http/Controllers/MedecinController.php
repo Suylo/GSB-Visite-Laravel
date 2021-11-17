@@ -26,11 +26,14 @@ class MedecinController extends Controller
 
         $title = "Recherche d'un médecin";
 
-        // Recherche à travers la BDD et on met ces données à l'intérieur d'une variable
+        // Récupération du texte du champ recherche
         $q = $request->input( 'q' );
+
+        // Requête like si le champ correspond à un prénom/nom dans la BDD
         $medecins = Medecin::where('nom', 'LIKE', $q . '%')->orWhere('prenom', 'LIKE', $q . '%')->get();
 
         return view('medecins.search', [
+            'query' => $q,
             'medecins' => $medecins,
             'title' => $title
         ]);
@@ -72,7 +75,7 @@ class MedecinController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return Application|Factory|View
+     * @return Application|Factory|View|RedirectResponse
      */
     public function viewMedecinRapport(Request $request, $id){
 
@@ -82,11 +85,15 @@ class MedecinController extends Controller
             ->get();
         $medecinID = $id;
 
-        return view('medecins.rapports', [
-            'rapports' => $rapports,
-            'medecinID' => $medecinID,
-            'title' => $title
-        ]);
+        if (sizeof($rapports)){
+            return view('medecins.rapports', [
+                'rapports' => $rapports,
+                'medecinID' => $medecinID,
+                'title' => $title
+            ]);
+        } else {
+            return redirect()->back();
+        }
     }
 
 
@@ -134,19 +141,31 @@ class MedecinController extends Controller
             'nom' => 'required|string|max:25',
             'prenom' => 'required|string|max:25',
             'adresse' => 'required|string|max:255',
-            'tel' => 'required|string|max:20',
+            'departement' => 'required|digits_between:1,3',
+            'tel' => 'required|regex:/(0)[0-9]{9}/|max:10',
         ];
 
         // Messages
         $rulesMsg = [
-            'max' => 'Le nombre de caractères ne peut pas excéder :max !',
+            'max' => 'Le nombre de caractères de :attribute ne peut pas excéder :max !',
             'nom.required' => 'Le champ "Nom" ne peut pas être vide !',
             'prenom.required' => 'Le champ "Prénom" ne peut pas être vide !',
             'adresse.required' => 'L\'adresse ne peut pas être vide !',
-            'tel.required' => 'Le numéro de téléphone est obligatoire !'
+            'departement.required' => 'Le numéro du département est obligatoire',
+            'departement.digits_between' => 'Le numéro de :attribute doit être compris entre 1 et 3',
+            'tel.required' => 'Le numéro de téléphone est obligatoire !',
+            'tel.regex' => 'Le format de téléphone est invalide'
         ];
 
-        $validator = Validator::make($request->all(), $rules, $rulesMsg);
+        $nicesNames = [
+          'nom' => 'Nom' ,
+          'prenom' => 'Prénom',
+          'adresse' => 'Adresse',
+          'tel' => 'Téléphone',
+            'departement' => 'Département'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $rulesMsg, $nicesNames);
         if ($validator->fails()) {
             return redirect()->back()
 //                ->with('profileFailed', 'Tous les champs doivent obligatoirement être rempli (sauf spécialité) et ils ne doivent pas être vide !')
@@ -160,6 +179,7 @@ class MedecinController extends Controller
                     'prenom' => $data['prenom'],
                     'adresse' => $data['adresse'],
                     'tel' => $data['tel'],
+                    'departement' => $data['departement'],
                     'specialite_complementaire' => $data['speci'],
                 ]);
 
