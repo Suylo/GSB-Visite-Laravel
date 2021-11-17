@@ -8,12 +8,16 @@
         <div class="container is-max-desktop">
             <div class="notification is-link navnotif">
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">home</span>&nbsp;
                 <a href="/">Accueil</a>
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">folder</span>&nbsp;
                 <a href="/rapports">Gérer mes rapports</a>
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">find_in_page</span>&nbsp;
                 <a href="/rapports/search">Recherche d'un rapport</a>
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">edit</span>&nbsp;
                 Modification
             </div>
         </div>
@@ -38,7 +42,15 @@
                             <tr>
                                 <td>{{ $rapport->date }}</td>
                                 <td>
-                                    <input type="text" name="motif" class="input" value="{{ $rapport->motif }}">
+                                    {{--< input type="text" name="motif" class="input" value="{{ $rapport->motif }}"> --}}
+                                    <div class="select">
+                                        <select name="motif" id="motif">
+                                            <option hidden>{{ $rapport->motif }}</option>
+                                            @foreach($motifs as $motif)
+                                                <option value="{{ $motif->motif }}">{{ $motif->motif }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @if ($errors->has('motif'))
                                         <p class="help is-danger">{{ $errors->first('motif') }}</p>
                                     @endif
