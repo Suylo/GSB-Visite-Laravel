@@ -9,12 +9,16 @@
             <div class="notification is-link navnotif">
                 @foreach($medecin as $m)
                     <span class="material-icons">chevron_right</span>
+                    <span class="material-icons">home</span>&nbsp;
                         <a href="/">Accueil</a>
                     <span class="material-icons">chevron_right</span>
+                    <span class="material-icons">person_search</span>&nbsp;
                         <a href="/search">Recherche d'un médecin</a>
                     <span class="material-icons">chevron_right</span>
+                    <span class="material-icons">account_circle</span>&nbsp;
                         <a href="/profile/{{ $m->id }}">Profil <strong>#{{ $m->id }}</strong></a>
                     <span class="material-icons">chevron_right</span>
+                    <span class="material-icons">edit</span>&nbsp;
                     Modification du profil
                 @endforeach
             </div>
@@ -71,6 +75,15 @@
                                             <div class="form-group mb-3">
                                                 @if ($errors->has('adresse'))
                                                     <p class="help is-danger">{{ $errors->first('adresse') }}</p>
+                                                @endif
+                                            </div>
+                                            <li class="mt-2">
+                                                <strong class="has-text-warning">Département :</strong>
+                                                <input type="text" name="departement" id="departement" class="input mt-2" value="{{ $m->departement }}">
+                                            </li>
+                                            <div class="form-group mb-3">
+                                                @if ($errors->has('departement'))
+                                                    <p class="help is-danger">{{ $errors->first('departement') }}</p>
                                                 @endif
                                             </div>
                                             <li class="mt-2">
