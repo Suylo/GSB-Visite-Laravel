@@ -38,8 +38,7 @@ class Rapport extends Model
      *
      * @return HasMany
      */
-    public function offrirs()
-    {
+    public function offrirs()   {
         return $this->hasMany(Offrir::class, 'id_rapport');
     }
 
@@ -49,8 +48,7 @@ class Rapport extends Model
      *
      * @return BelongsTo
      */
-    public function medecin()
-    {
+    public function medecin() {
         return $this->belongsTo(Medecin::class, 'id_medecin');
     }
 
@@ -60,8 +58,7 @@ class Rapport extends Model
      *
      * @return BelongsTo
      */
-    public function visiteur()
-    {
+    public function visiteur()   {
         return $this->belongsTo(Visiteur::class, 'id_visiteur');
     }
 }
