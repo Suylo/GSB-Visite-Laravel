@@ -11,13 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class EditRapportsController extends Controller
 
 {
 
     /**
-     * Fonction de recherche permettant ainsi de récupèrer certains rapports
+     * Fonction de recherche permettant de récupérer les rapports selon une date donnée
      *
      * @param Request $request
      * @return Application|Factory|View
@@ -27,9 +28,14 @@ class EditRapportsController extends Controller
         $title = "Recherche d'un rapport";
 
         // Recherche de rapport selon l'id du visiteur (donc les rapports d'un seul visiteur (celui connecté)), et le champ date
+
+        // Récupération de la date donnée
         $q = $request->input('q');
+
+        // Récupération des rapports selon la date donné et l'id du visiteur connecté
         $rapports = Rapport::where('date', 'LIKE', $q . '%')->where('id_visiteur', Auth::id())->orderBy('date', 'DESC')->get();
 
+        // On affiche les rapports dans la vue
         return view('rapports.search', [
             'rapports' => $rapports,
             'title' => $title
@@ -51,16 +57,19 @@ class EditRapportsController extends Controller
 
         $title = "Modification du rapport : " . $id;
 
+        // Récupération des 6 motifs
+        $motifs = Rapport::select('motif')->distinct()->paginate(6);
+
         // Récupèration du rapport selon l'ID entré et selon l'ID du visiteur
         $rapport = Rapport::where('id_visiteur', Auth::id())->where('id', $id)->get();
-
 
         // Vérification si l'ID du rapport est bien en relation avec le visiteur | Si non, on retourne en arrière
         // Cela permet ainsi d'éviter toutes modifications d'un rapport qui ne serait pas le rapport du visiteur connecté.
         if (sizeof($rapport)) {
             return view('rapports.edit', [
                 'title' => $title,
-                'rapports' => $rapport
+                'rapports' => $rapport,
+                'motifs' => $motifs
             ]);
         } else {
             return redirect()->back();
@@ -77,9 +86,15 @@ class EditRapportsController extends Controller
      */
     public function updateRapport(Request $request, $id)
     {
+        $motifs = Rapport::select('motif')->distinct()->paginate(6);
+
+        foreach ($motifs as $motif){
+            $Motifs[] = $motif->motif;
+        }
+
         // Règles de validation
         $rules = [
-            'motif' => 'required|string|min:1|max:100',
+            'motif' => ['required', Rule::in($Motifs),'min:1','max:100'],
             'bilan' => 'required|string|min:1|max:100',
         ];
 
