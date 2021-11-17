@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EditRapportsController;
 use App\Http\Controllers\MedecinController;
+use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\OffrirController;
 use App\Http\Controllers\RapportController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Visiteur;
@@ -47,6 +49,10 @@ Route::get('/profile/{id}/rapports', [MedecinController::class, 'viewMedecinRapp
 
 Route::get('/profile/{id}/edit', [MedecinController::class, 'viewUpdateProfile'])->middleware('auth');
 Route::post('/profile/{id}/edit', [MedecinController::class, 'updateProfile'])->name('update.profile');
+
+
+// ABOUT
+Route::get('/about', [MedicamentController::class, 'index'])->middleware('auth');
 
 // INDEX
 Route::get('/', [AuthController::class, 'index'])->name('auth');
