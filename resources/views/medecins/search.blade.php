@@ -6,9 +6,11 @@
         <div class="container is-max-desktop">
             <div class="notification is-link navnotif">
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">home</span>&nbsp;
                 <a href="/">Accueil</a>
                 <span class="material-icons">chevron_right</span>
-                <span>Recherche d'un médecin</span>
+                <span class="material-icons">person_search</span>&nbsp;
+                Recherche d'un médecin
             </div>
         </div>
     </section>
@@ -35,7 +37,7 @@
 
 
 
-    @if(count($medecins) > 0)
+    @if(count($medecins) > 0 && $query != null)
         <div class="box container is-max-desktop mb-6">
             <table class="table is-striped is-fullwidth ">
                 <thead>

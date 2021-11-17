@@ -5,8 +5,10 @@
         <div class="container is-max-desktop">
             <div class="notification is-link navnotif">
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">home</span>&nbsp;
                 <a href="/">Accueil</a>
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">folder</span>&nbsp;
                 <span>Gérer mes rapports</span>
             </div>
             <div class="buttons">

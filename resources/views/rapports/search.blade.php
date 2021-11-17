@@ -6,11 +6,14 @@
         <div class="container is-max-desktop">
             <div class="notification is-link navnotif">
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">home</span>&nbsp;
                 <a href="/">Accueil</a>
                 <span class="material-icons">chevron_right</span>
+                <span class="material-icons">folder</span>&nbsp;
                 <a href="/rapports">Gérer mes rapports</a>
                 <span class="material-icons">chevron_right</span>
-                <span>Recherche d'un rapport</span>
+                <span class="material-icons">find_in_page</span>&nbsp;
+                <a href="/rapports/search">Recherche d'un rapport</a>
             </div>
         </div>
     </section>
@@ -62,7 +65,7 @@
                             @endforeach
                         </td>
                         <td>
-                            <a href="/rapports/edit/{{ $rapport->id }}" class="button is-link">
+                            <a href="/rapports/edit/{{ $rapport->id }}" class="button is-link" title="Modifier le rapport N°{{ $rapport->id }}">
                                 <span class="material-icons">edit</span>
                             </a>
                         </td>
