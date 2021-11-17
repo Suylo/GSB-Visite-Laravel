@@ -32,7 +32,6 @@
                     Accueil
                 </a>
                 @if(Auth::check())
-
                     <a class="navbar-item" href="/dashboard">
                         <span class="material-icons">info</span>&nbsp;
                         Profil
@@ -53,8 +52,8 @@
                                 Gérer les médecins
                             </a>
                             <a class="navbar-item" href="/about">
-                                <span class="material-icons">settings</span>&nbsp;
-                                A propos de
+                                <span class="material-icons">medication</span>&nbsp;
+                                Liste des médicaments
                             </a>
                         </div>
                     </div>
@@ -62,7 +61,6 @@
             </div>
 
             @if(Auth::check())
-
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="navbar-item">
@@ -87,6 +85,6 @@
 
         @yield('content')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     </body>
 </html>
