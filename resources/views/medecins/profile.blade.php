@@ -9,11 +9,14 @@
             <div class="notification is-link navnotif">
                 @foreach($medecin as $m)
                     <span class="material-icons">chevron_right</span>
-                        <a href="/">Accueil</a>
+                    <span class="material-icons">home</span>&nbsp;
+                    <a href="/">Accueil</a>
                     <span class="material-icons">chevron_right</span>
-                        <a href="/search">Recherche d'un médecin</a>
+                    <span class="material-icons">person_search</span>&nbsp;
+                    <a href="/search">Recherche d'un médecin</a>
                     <span class="material-icons">chevron_right</span>
-                        Profil <strong>#{{ $m->id }}</strong>
+                    <span class="material-icons">account_circle</span>&nbsp;
+                    Profil <strong>#{{ $m->id }}</strong>
                 @endforeach
             </div>
 
@@ -35,6 +38,10 @@
                                     <li>
                                         <strong class="has-text-primary">Adresse :</strong>
                                         {{ $m->adresse }}
+                                    </li>
+                                    <li>
+                                        <strong class="has-text-warning">Département :</strong>
+                                        {{ $m->departement }}
                                     </li>
                                     <li class="level-item">
                                         •&nbsp;<strong class="has-text-info">Téléphone :</strong>&nbsp;
